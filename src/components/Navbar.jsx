@@ -1,62 +1,100 @@
-
 "use client";
 
 import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
-import { useState } from "react";
 
 export default function Navbar() {
   const { data: session } = useSession();
-  const [searchTerm, setSearchTerm] = useState("");
 
   return (
-    <nav className="bg-[#0a1628] border-b border-[#1e3a5f] px-6 py-4">
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
+    <nav style={{
+      background: "#0f0a1e",
+      borderBottom: "0.5px solid rgba(255,255,255,0.08)",
+      padding: "14px 24px",
+      position: "sticky",
+      top: 0,
+      zIndex: 50,
+    }}>
+      <div style={{
+        maxWidth: "1200px",
+        margin: "0 auto",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+      }}>
 
         {/* Logo */}
-        <Link href="/" className="text-2xl font-bold text-white">
-          Case<span className="text-[#c9a84c]">Vault</span>
+        <Link href="/" style={{ textDecoration: "none" }}>
+          <span style={{ fontSize: "22px", fontWeight: "600", color: "#fff" }}>
+            Case<span style={{ color: "#a78bfa" }}>Vault</span>
+          </span>
         </Link>
 
         {/* Category Links */}
-        <div className="hidden md:flex items-center gap-6 text-sm text-gray-400">
-          <Link href="/?category=Strategy" className="hover:text-white transition">Strategy</Link>
-          <Link href="/?category=Finance" className="hover:text-white transition">Finance</Link>
-          <Link href="/?category=Marketing" className="hover:text-white transition">Marketing</Link>
-          <Link href="/?category=Social Impact" className="hover:text-white transition">Social Impact</Link>
+        <div style={{ display: "flex", gap: "24px" }}>
+          {["Strategy", "Finance", "Marketing", "Social Impact"].map((cat) => (
+            <Link
+              key={cat}
+              href={`/?category=${cat}`}
+              style={{
+                color: "rgba(255,255,255,0.45)",
+                fontSize: "13px",
+                textDecoration: "none",
+                transition: "color 0.2s",
+              }}
+              onMouseEnter={e => e.target.style.color = "#fff"}
+              onMouseLeave={e => e.target.style.color = "rgba(255,255,255,0.45)"}
+            >
+              {cat}
+            </Link>
+          ))}
         </div>
 
         {/* Right Side */}
-        <div className="flex items-center gap-3">
-          {/* Search Bar */}
-          <input
-            type="text"
-            placeholder="Search presentations..."
-            className="bg-[#1e3a5f] text-white text-sm px-4 py-2 rounded-lg outline-none placeholder-gray-400 w-48 focus:w-64 transition-all"
-          />
+        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
 
-          {/* Upload Button */}
           {session ? (
-            <div className="flex items-center gap-3">
-              <Link
-                href="/upload"
-                className="bg-[#c9a84c] text-[#0a1628] text-sm font-semibold px-4 py-2 rounded-lg hover:bg-[#b8973b] transition"
-              >
+            <>
+              <span style={{ color: "rgba(255,255,255,0.35)", fontSize: "13px" }}>
+                {session.user.email}
+              </span>
+              <Link href="/upload" style={{
+                background: "linear-gradient(135deg, #7c3aed, #4f46e5)",
+                color: "#fff",
+                fontSize: "13px",
+                fontWeight: "500",
+                padding: "8px 18px",
+                borderRadius: "8px",
+                textDecoration: "none",
+              }}>
                 ↑ Upload
               </Link>
               <button
                 onClick={() => signOut()}
-                className="text-sm text-gray-400 hover:text-white transition"
+                style={{
+                  background: "rgba(255,255,255,0.05)",
+                  border: "0.5px solid rgba(255,255,255,0.12)",
+                  color: "rgba(255,255,255,0.5)",
+                  fontSize: "13px",
+                  padding: "8px 14px",
+                  borderRadius: "8px",
+                  cursor: "pointer",
+                }}
               >
-                Sign Out
+                Sign out
               </button>
-            </div>
+            </>
           ) : (
-            <Link
-              href="/login"
-              className="bg-[#c9a84c] text-[#0a1628] text-sm font-semibold px-4 py-2 rounded-lg hover:bg-[#b8973b] transition"
-            >
-              Sign In
+            <Link href="/login" style={{
+              background: "linear-gradient(135deg, #7c3aed, #4f46e5)",
+              color: "#fff",
+              fontSize: "13px",
+              fontWeight: "500",
+              padding: "8px 18px",
+              borderRadius: "8px",
+              textDecoration: "none",
+            }}>
+              Sign in
             </Link>
           )}
         </div>

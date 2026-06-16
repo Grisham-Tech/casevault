@@ -1,48 +1,112 @@
+const CATEGORY_COLORS = {
+  Strategy: { bg: "rgba(124,58,237,0.15)", color: "#a78bfa", border: "rgba(124,58,237,0.3)" },
+  Finance: { bg: "rgba(59,130,246,0.15)", color: "#60a5fa", border: "rgba(59,130,246,0.3)" },
+  Marketing: { bg: "rgba(236,72,153,0.15)", color: "#f472b6", border: "rgba(236,72,153,0.3)" },
+  "Social Impact": { bg: "rgba(16,185,129,0.15)", color: "#34d399", border: "rgba(16,185,129,0.3)" },
+  Operations: { bg: "rgba(245,158,11,0.15)", color: "#fbbf24", border: "rgba(245,158,11,0.3)" },
+  Technology: { bg: "rgba(6,182,212,0.15)", color: "#22d3ee", border: "rgba(6,182,212,0.3)" },
+};
 
-import Link from "next/link";
+const DEFAULT_COLOR = { bg: "rgba(124,58,237,0.15)", color: "#a78bfa", border: "rgba(124,58,237,0.3)" };
 
 export default function SlideCard({ slide }) {
+  const colors = CATEGORY_COLORS[slide.category] || DEFAULT_COLOR;
+
   return (
-    <div className="bg-[#0f2137] rounded-xl overflow-hidden hover:transform hover:scale-105 transition-all duration-300 cursor-pointer border border-[#1e3a5f] hover:border-[#c9a84c]">
-      
+    <div style={{
+      background: "#13102a",
+      border: "0.5px solid rgba(255,255,255,0.08)",
+      borderRadius: "12px",
+      overflow: "hidden",
+      transition: "border-color 0.2s, transform 0.2s",
+      cursor: "pointer",
+    }}
+      onMouseEnter={e => {
+        e.currentTarget.style.borderColor = "rgba(124,58,237,0.45)";
+        e.currentTarget.style.transform = "translateY(-3px)";
+      }}
+      onMouseLeave={e => {
+        e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)";
+        e.currentTarget.style.transform = "translateY(0)";
+      }}
+    >
       {/* Preview Image */}
-      <div className="relative">
+      <div style={{ position: "relative" }}>
         <img
           src={slide.previewImageUrl}
           alt={slide.title}
-          className="w-full h-48 object-cover"
+          style={{ width: "100%", height: "160px", objectFit: "cover", display: "block" }}
         />
+        {/* Dark overlay */}
+        <div style={{
+          position: "absolute", inset: 0,
+          background: "linear-gradient(to top, rgba(19,16,42,0.8), transparent)",
+        }} />
         {/* Category Badge */}
-        <span className="absolute top-3 left-3 bg-[#0a1628] text-[#c9a84c] text-xs font-semibold px-3 py-1 rounded-full">
+        <span style={{
+          position: "absolute", top: "10px", left: "10px",
+          background: colors.bg,
+          color: colors.color,
+          border: `0.5px solid ${colors.border}`,
+          fontSize: "11px", fontWeight: "500",
+          padding: "3px 10px", borderRadius: "20px",
+        }}>
           {slide.category}
         </span>
       </div>
 
-      {/* Card Content */}
-      <div className="p-4">
-        <h3 className="text-white font-bold text-lg leading-tight mb-2">
+      {/* Card Body */}
+      <div style={{ padding: "14px" }}>
+        <h3 style={{
+          color: "#fff", fontSize: "14px",
+          fontWeight: "500", lineHeight: "1.4",
+          marginBottom: "6px",
+          display: "-webkit-box",
+          WebkitLineClamp: 2,
+          WebkitBoxOrient: "vertical",
+          overflow: "hidden",
+        }}>
           {slide.title}
         </h3>
-        <p className="text-gray-400 text-sm mb-4 line-clamp-2">
+
+        <p style={{
+          color: "rgba(255,255,255,0.35)",
+          fontSize: "12px", lineHeight: "1.5",
+          marginBottom: "10px",
+          display: "-webkit-box",
+          WebkitLineClamp: 2,
+          WebkitBoxOrient: "vertical",
+          overflow: "hidden",
+        }}>
           {slide.description}
         </p>
 
-        {/* Footer */}
-        <div className="flex items-center justify-between">
-          <span className="text-gray-500 text-xs">{slide.competitionName}</span>
-          <span className="text-[#c9a84c] text-xs font-semibold">{slide.year}</span>
-        </div>
-
         {/* Tags */}
-        <div className="flex flex-wrap gap-1 mt-3">
-          {slide.tags.slice(0, 3).map((tag, index) => (
-            <span
-              key={index}
-              className="bg-[#1e3a5f] text-gray-300 text-xs px-2 py-1 rounded-full"
-            >
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "4px", marginBottom: "12px" }}>
+          {slide.tags.slice(0, 3).map((tag, i) => (
+            <span key={i} style={{
+              background: "rgba(255,255,255,0.05)",
+              color: "rgba(255,255,255,0.35)",
+              fontSize: "10px",
+              padding: "2px 8px",
+              borderRadius: "20px",
+            }}>
               {tag}
             </span>
           ))}
+        </div>
+
+        {/* Footer */}
+        <div style={{
+          display: "flex", justifyContent: "space-between",
+          alignItems: "center", marginBottom: "12px",
+        }}>
+          <span style={{ color: "rgba(255,255,255,0.25)", fontSize: "11px" }}>
+            {slide.competitionName}
+          </span>
+          <span style={{ color: colors.color, fontSize: "11px", fontWeight: "500" }}>
+            {slide.year}
+          </span>
         </div>
 
         {/* View Button */}
@@ -50,9 +114,20 @@ export default function SlideCard({ slide }) {
           href={slide.slideFileUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-4 block text-center bg-[#1e3a5f] hover:bg-[#c9a84c] hover:text-[#0a1628] text-white text-sm font-semibold py-2 rounded-lg transition-all"
+          style={{
+            display: "block", textAlign: "center",
+            background: "rgba(124,58,237,0.15)",
+            border: "0.5px solid rgba(124,58,237,0.3)",
+            color: "#a78bfa",
+            fontSize: "12px", fontWeight: "500",
+            padding: "8px", borderRadius: "8px",
+            textDecoration: "none",
+            transition: "background 0.2s",
+          }}
+          onMouseEnter={e => e.currentTarget.style.background = "rgba(124,58,237,0.3)"}
+          onMouseLeave={e => e.currentTarget.style.background = "rgba(124,58,237,0.15)"}
         >
-          View Slides
+          View Slides →
         </a>
       </div>
     </div>
