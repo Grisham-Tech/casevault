@@ -1,3 +1,9 @@
+"use client";
+
+import { useSession } from "next-auth/react";
+import { useState } from "react";
+
+
 const CATEGORY_COLORS = {
   Strategy: { bg: "rgba(124,58,237,0.15)", color: "#a78bfa", border: "rgba(124,58,237,0.3)" },
   Finance: { bg: "rgba(59,130,246,0.15)", color: "#60a5fa", border: "rgba(59,130,246,0.3)" },
@@ -9,8 +15,37 @@ const CATEGORY_COLORS = {
 
 const DEFAULT_COLOR = { bg: "rgba(124,58,237,0.15)", color: "#a78bfa", border: "rgba(124,58,237,0.3)" };
 
-export default function SlideCard({ slide }) {
+export default function SlideCard({ slide, onDelete }) {
+  const { data: session } = useSession();
+  const [deleting, setDeleting] = useState(false);
   const colors = CATEGORY_COLORS[slide.category] || DEFAULT_COLOR;
+
+  const isOwner = session?.user?.email === slide.uploadedBy;
+
+  async function handleDelete(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!confirm(`Delete "${slide.title}"? This cannot be undone.`)) return;
+
+    setDeleting(true);
+    try {
+      const res = await fetch(`/api/slides/${slide._id}`, {
+        method: "DELETE",
+      });
+
+      if (res.ok) {
+        onDelete?.(slide._id);
+      } else {
+        alert("Failed to delete slide");
+        setDeleting(false);
+      }
+    } catch (err) {
+      alert("Something went wrong");
+      setDeleting(false);
+    }
+  }
+
 
   return (
     <div style={{
@@ -129,6 +164,26 @@ export default function SlideCard({ slide }) {
         >
           View Slides →
         </a>
+
+        {/* Delete Button - only visible to the slide's owner */}
+        {isOwner && (
+          <button
+            onClick={handleDelete}
+            disabled={deleting}
+            style={{
+              display: "block", width: "100%", textAlign: "center",
+              background: "rgba(239,68,68,0.1)",
+              border: "0.5px solid rgba(239,68,68,0.3)",
+              color: "#f87171",
+              fontSize: "12px", fontWeight: "500",
+              padding: "8px", borderRadius: "8px",
+              marginTop: "8px", cursor: deleting ? "not-allowed" : "pointer",
+              opacity: deleting ? 0.5 : 1,
+            }}
+          >
+            {deleting ? "Deleting..." : "Delete Slide"}
+          </button>
+        )}
       </div>
     </div>
   );

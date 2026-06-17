@@ -200,7 +200,11 @@ export default function Home() {
             gap: "20px",
           }}>
             {slides.map((slide) => (
-              <SlideCard key={slide._id} slide={slide} />
+              <SlideCard
+                key={slide._id}
+                slide={slide}
+                onDelete={(id) => setSlides((prev) => prev.filter((s) => s._id !== id))}
+              />
             ))}
           </div>
         )}
