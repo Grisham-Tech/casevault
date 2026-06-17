@@ -41,9 +41,10 @@ export async function POST(request) {
       { message: "User created successfully", userId: user._id },
       { status: 201 }
     );
-  } catch (error) {
+} catch (error) {
+    console.error("REGISTER ERROR:", error);
     return NextResponse.json(
-      { error: "Something went wrong" },
+      { error: error.message || "Something went wrong" },
       { status: 500 }
     );
   }

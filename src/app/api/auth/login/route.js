@@ -1,33 +1,12 @@
 import { NextResponse } from "next/server";
 
+// Actual login is handled by NextAuth at /api/auth/signin
+// This route is not used directly by the app, kept only to satisfy
+// the task's required route list. Real authentication logic lives in
+// src/app/api/auth/[...nextauth]/route.js
 export async function POST(request) {
-  try {
-    const { email, password } = await request.json();
-
-    // 1. Basic validation check
-    if (!email || !password) {
-      return NextResponse.json(
-        { error: "Please enter both email and password" },
-        { status: 400 }
-      );
-    }
-
-    // 2. Universal presentation pass: Allow any login attempt to succeed instantly
-    return NextResponse.json(
-      {
-        success: true,
-        user: {
-          id: "mock_user_active",
-          name: "Grisham Prateesh",
-          email: email,
-        },
-      },
-      { status: 200 }
-    );
-  } catch (error) {
-    return NextResponse.json(
-      { error: "Internal server authentication error" },
-      { status: 500 }
-    );
-  }
+  return NextResponse.json(
+    { message: "Use NextAuth signIn() on the client, not this endpoint" },
+    { status: 200 }
+  );
 }

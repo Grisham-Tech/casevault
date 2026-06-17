@@ -157,7 +157,9 @@ export default function Home() {
               }}
             >
               {SORT_OPTIONS.map((o) => (
-                <option key={o.value} value={o.value}>{o.label}</option>
+                <option key={o.value} value={o.value} style={{ background: "#13102a", color: "#fff" }}>
+                  {o.label}
+                </option>
               ))}
             </select>
           </div>

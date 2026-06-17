@@ -227,7 +227,11 @@ export default function UploadPage() {
             <div>
               <label style={labelStyle}>Year</label>
               <select name="year" value={form.year} onChange={handleChange} style={inputStyle}>
-                {YEARS.map((y) => <option key={y} value={y}>{y}</option>)}
+                {YEARS.map((y) => (
+                    <option key={y} value={y} style={{ background: "#13102a", color: "#fff" }}>
+                        {y}
+                    </option>
+                ))}
               </select>
             </div>
           </div>
@@ -236,7 +240,11 @@ export default function UploadPage() {
           <div>
             <label style={labelStyle}>Category</label>
             <select name="category" value={form.category} onChange={handleChange} style={inputStyle}>
-              {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
+                {CATEGORIES.map((c) => (
+                    <option key={c} value={c} style={{ background: "#13102a", color: "#fff" }}>
+                        {c}
+                    </option>
+                ))}
             </select>
           </div>
 

@@ -4,24 +4,46 @@ const SlideSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      required: [true, "Please provide a title for this slide."],
-    },
-    imageUrl: {
-      type: String,
-      required: [true, "Please provide an image URL."],
+      required: true,
     },
     description: {
       type: String,
+      required: true,
     },
-    order: {
+    tags: {
+      type: [String],
+      default: [],
+    },
+    category: {
+      type: String,
+      required: true,
+    },
+    competitionName: {
+      type: String,
+      required: true,
+    },
+    year: {
       type: Number,
-      default: 0,
+      required: true,
+    },
+    previewImageUrl: {
+      type: String,
+      required: true,
+    },
+    slideFileUrl: {
+      type: String,
+      required: true,
+    },
+    uploadedBy: {
+      type: String,
+      required: true,
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
 
-// Prevents Mongoose from creating a duplicate model compilation error in Next.js hot-reloads
 const Slide = mongoose.models.Slide || mongoose.model("Slide", SlideSchema);
 
 export default Slide;
