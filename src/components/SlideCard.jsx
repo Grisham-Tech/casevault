@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 
@@ -164,6 +166,25 @@ export default function SlideCard({ slide, onDelete }) {
         >
           View Slides →
         </a>
+
+
+        {/* Edit Button - only visible to the slide's owner */}
+        {isOwner && (
+          <Link
+            href={`/edit/${slide._id}`}
+            style={{
+              display: "block", width: "100%", textAlign: "center",
+              background: "rgba(96,165,250,0.1)",
+              border: "0.5px solid rgba(96,165,250,0.3)",
+              color: "#60a5fa",
+              fontSize: "12px", fontWeight: "500",
+              padding: "8px", borderRadius: "8px",
+              marginTop: "8px", textDecoration: "none",
+            }}
+          >
+            Edit Slide
+          </Link>
+        )}
 
         {/* Delete Button - only visible to the slide's owner */}
         {isOwner && (
