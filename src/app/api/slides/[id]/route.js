@@ -7,16 +7,28 @@ import Slide from "@/models/Slide";
 export async function GET(request, { params }) {
   try {
     await connectDB();
+
+    console.log("RECEIVED ID:", params.id);
+    console.log("ID TYPE:", typeof params.id);
+    console.log("ID LENGTH:", params.id?.length);
+
     const slide = await Slide.findById(params.id);
 
+    console.log("SLIDE FOUND:", slide ? "YES" : "NO");
+
     if (!slide) {
+      // Let's also try fetching ALL slides to compare
+      const allSlides = await Slide.find({}, "_id title");
+      console.log("ALL SLIDE IDS IN DB:", allSlides.map(s => s._id.toString()));
+
       return NextResponse.json({ error: "Slide not found" }, { status: 404 });
     }
 
     return NextResponse.json({ slide });
   } catch (error) {
+    console.error("GET SLIDE ERROR:", error);
     return NextResponse.json(
-      { error: "Failed to fetch slide" },
+      { error: error.message || "Failed to fetch slide" },
       { status: 500 }
     );
   }
