@@ -1,5 +1,6 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import SlideCard from "@/components/SlideCard";
@@ -12,10 +13,11 @@ const SORT_OPTIONS = [
 ];
 
 export default function Home() {
+  const searchParams = useSearchParams();
   const [slides, setSlides] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState(searchParams.get("category") || "");
   const [sort, setSort] = useState("newest");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
