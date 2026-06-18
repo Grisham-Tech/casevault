@@ -13,7 +13,7 @@ export async function GET(request, { params }) {
       return NextResponse.json({ error: "Slide not found" }, { status: 404 });
     }
 
-    return NextResponse.json(slide);
+    return NextResponse.json({ slide });
   } catch (error) {
     return NextResponse.json(
       { error: "Failed to fetch slide" },
