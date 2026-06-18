@@ -8,25 +8,16 @@ export async function GET(request, { params }) {
   try {
     await connectDB();
 
-    console.log("RECEIVED ID:", params.id);
-    console.log("ID TYPE:", typeof params.id);
-    console.log("ID LENGTH:", params.id?.length);
+    const { id } = await params;
+    const slide = await Slide.findById(id);
 
-    const slide = await Slide.findById(params.id);
-
-    console.log("SLIDE FOUND:", slide ? "YES" : "NO");
 
     if (!slide) {
-      // Let's also try fetching ALL slides to compare
-      const allSlides = await Slide.find({}, "_id title");
-      console.log("ALL SLIDE IDS IN DB:", allSlides.map(s => s._id.toString()));
-
       return NextResponse.json({ error: "Slide not found" }, { status: 404 });
     }
 
     return NextResponse.json({ slide });
   } catch (error) {
-    console.error("GET SLIDE ERROR:", error);
     return NextResponse.json(
       { error: error.message || "Failed to fetch slide" },
       { status: 500 }
@@ -43,9 +34,10 @@ export async function PUT(request, { params }) {
     }
 
     await connectDB();
+    const { id } = await params;
     const data = await request.json();
 
-    const updatedSlide = await Slide.findByIdAndUpdate(params.id, data, {
+    const updatedSlide = await Slide.findByIdAndUpdate(id, data, {
       new: true, // Returns the modified document rather than the original
       runValidators: true,
     });
@@ -72,7 +64,8 @@ export async function DELETE(request, { params }) {
     }
 
     await connectDB();
-    const deletedSlide = await Slide.findByIdAndDelete(params.id);
+    const { id } = await params;
+    const deletedSlide = await Slide.findByIdAndDelete(id);
 
     if (!deletedSlide) {
       return NextResponse.json({ error: "Slide not found" }, { status: 404 });
