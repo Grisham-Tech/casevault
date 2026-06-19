@@ -6,6 +6,10 @@ import { useSession } from "next-auth/react";
 import { useState } from "react";
 
 
+
+
+
+
 const CATEGORY_COLORS = {
   Strategy: { bg: "rgba(124,58,237,0.15)", color: "#a78bfa", border: "rgba(124,58,237,0.3)" },
   Finance: { bg: "rgba(59,130,246,0.15)", color: "#60a5fa", border: "rgba(59,130,246,0.3)" },
@@ -20,6 +24,7 @@ const DEFAULT_COLOR = { bg: "rgba(124,58,237,0.15)", color: "#a78bfa", border: "
 export default function SlideCard({ slide, onDelete }) {
   const { data: session } = useSession();
   const [deleting, setDeleting] = useState(false);
+  const [expanded, setExpanded] = useState(false);
   const colors = CATEGORY_COLORS[slide.category] || DEFAULT_COLOR;
 
   const isOwner = session?.user?.email === slide.uploadedBy;
@@ -106,17 +111,30 @@ export default function SlideCard({ slide, onDelete }) {
           {slide.title}
         </h3>
 
-        <p style={{
-          color: "rgba(255,255,255,0.35)",
-          fontSize: "12px", lineHeight: "1.5",
-          marginBottom: "10px",
-          display: "-webkit-box",
-          WebkitLineClamp: 2,
-          WebkitBoxOrient: "vertical",
-          overflow: "hidden",
-        }}>
-          {slide.description}
-        </p>
+                  <p style={{
+            color: "rgba(255,255,255,0.35)",
+            fontSize: "12px", lineHeight: "1.5",
+            marginBottom: "6px",
+            display: expanded ? "block" : "-webkit-box",
+            WebkitLineClamp: expanded ? "unset" : 2,
+            WebkitBoxOrient: "vertical",
+            overflow: expanded ? "visible" : "hidden",
+          }}>
+            {slide.description}
+          </p>
+
+          {slide.description.length > 100 && (
+            <button
+              onClick={(e) => { e.preventDefault(); setExpanded(!expanded); }}
+              style={{
+                background: "none", border: "none", cursor: "pointer",
+                color: colors.color, fontSize: "11px", fontWeight: "500",
+                padding: 0, marginBottom: "12px", display: "block",
+              }}
+            >
+              {expanded ? "Show less" : "Read more"}
+            </button>
+          )}
 
         {/* Tags */}
         <div style={{ display: "flex", flexWrap: "wrap", gap: "4px", marginBottom: "12px" }}>

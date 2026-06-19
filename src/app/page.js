@@ -23,6 +23,13 @@ export default function Home() {
   const [totalPages, setTotalPages] = useState(1);
   const [total, setTotal] = useState(0);
 
+    // Sync category state whenever the URL's category param changes
+  useEffect(() => {
+    const urlCategory = searchParams.get("category") || "";
+    setCategory(urlCategory);
+    setPage(1);
+  }, [searchParams]);
+
   useEffect(() => { fetchSlides(); }, [search, category, sort, page]);
 
   async function fetchSlides() {
